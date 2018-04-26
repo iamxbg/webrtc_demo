@@ -227,5 +227,6 @@
 	  <modules>
 
 	 <module>rtc_web</module>
+	 <module>rtc_web_java</module>
 	  </modules>
 </project>

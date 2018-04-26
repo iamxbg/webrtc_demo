@@ -16,8 +16,9 @@
 	<bean class="org.springframework.web.servlet.resource.DefaultServletHttpRequestHandler" />
 
 	<bean  class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+		p:viewClass="org.springframework.web.servlet.view.JstlView"
 		p:suffix=".jsp"
-		p:prefix="/"
+		P:prefix="/WEB-INF/view"
 		/>
 		
 
