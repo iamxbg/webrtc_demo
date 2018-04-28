@@ -1,11 +1,9 @@
 package rtc_web_java.config;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 
+import java.util.Arrays;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
