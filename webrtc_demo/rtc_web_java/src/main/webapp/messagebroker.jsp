@@ -14,46 +14,45 @@
 
 	$(function(){
 
-			console.log('try build SockJS connection');
+			console.log('try build STOMP connection');
 
-			var sock=new SockJS("test")
+			var sock=new SockJS("testStomp")
 
 			
-			sock.onopen=function(){
-					console.log('sock open')
-				}
+			var stomp=Stomp.over(sock);
 
-			sock.onclose=function(){
-					console.log('sock close')
-				}
+			stomp.heartbeat.outgoing=3000
+			stomp.heartbeat.incoming=1000
 
-			sock.onmessage=function(e){
-					console.log('message:'+e.data)
-					sock.close()
-				}
-			
 			
 
+			var headers={login:null,passcode:null}
+			
+			stomp.connect(headers,function(){
+					console.log('connect successful')
 
-			$('#send').on('click',function(){
+				var	subscription=stomp.subscribe('/subscribe', function(msg) {
+
+						console.log('From server:'+msg)
+					
+					}, {})
+
+				console.log('subscribID:'+subscription.id)
+					
+				},function(){
+					console.log('connect error')
+				})
 				
-				if(sock){
-					console.log('true')
-					//var msg=$('#msg').val()
-					var msg="Play video"
-					sock.send(msg)
+				
+			
+				
+			$('#send').on('click',function(){
 
-				}else{
-					console.log('sock was closed')
-				}
-			})
-
-
-			$('#close').on('click',function(){
-				sock.close();	
-				console.log('scok close')
-			})
-		
+				var msg=$('#msg').val()
+				stomp.send('/topic/send',{},JSON.stringify('{message :" Kessage for stomp! '+msg+' :>"}'))
+						
+			})	
+			
 	})
 
 	

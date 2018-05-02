@@ -1,5 +1,6 @@
 package rtc_web_java.config;
 
+import java.io.FileInputStream;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -8,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketHandler;
@@ -44,6 +46,30 @@ public class WebSocketConfig implements WebSocketConfigurer{
 			}
 
 			@Override
+			protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) {
+				// TODO Auto-generated method stub
+				super.handleBinaryMessage(session, message);
+				
+				
+				
+				FileInputStream fis=new FileInputStream("D:/animal.webm");
+				
+				byte[] buffer=new byte[1024];
+				
+				int len;
+				
+				while((len=fis.read(buffer))!=-1) {
+
+					session.sendMessage(new BinaryMessage(buffer, false));
+				}
+				
+				session.sendMessage(new BinaryMessage(buffer));
+
+				session.sendMessage(new TextMessage(new String("OVer")));
+				
+			}
+
+			@Override
 			public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 				// TODO Auto-generated method stub
 				super.afterConnectionEstablished(session);
@@ -55,9 +81,8 @@ public class WebSocketConfig implements WebSocketConfigurer{
 				// TODO Auto-generated method stub
 				super.handleTextMessage(session, message);
 				
-				System.out.println("Message:"+message+" Uri:"+session.getUri());
-				
-				
+				System.out.println("Message:"+message.getPayload()+" Uri:"+session.getUri());
+
 			}
 			
 		}, "/test")
@@ -65,7 +90,7 @@ public class WebSocketConfig implements WebSocketConfigurer{
 		.addInterceptors(new HttpSessionHandshakeInterceptor(),MyHandshakeInterceptor())
 		.withSockJS()
 		.setClientLibraryUrl("http://localhost:8080/rtc_web_java/js/sockjs.js")
-		.setHeartbeatTime(5000);
+		.setHeartbeatTime(2000);
 		
 		
 	}
