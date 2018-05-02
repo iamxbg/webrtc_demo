@@ -1,6 +1,7 @@
 package rtc_web_java.config;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -51,21 +52,9 @@ public class WebSocketConfig implements WebSocketConfigurer{
 				super.handleBinaryMessage(session, message);
 				
 				
-				
-				FileInputStream fis=new FileInputStream("D:/animal.webm");
-				
-				byte[] buffer=new byte[1024];
-				
-				int len;
-				
-				while((len=fis.read(buffer))!=-1) {
 
-					session.sendMessage(new BinaryMessage(buffer, false));
-				}
-				
-				session.sendMessage(new BinaryMessage(buffer));
 
-				session.sendMessage(new TextMessage(new String("OVer")));
+
 				
 			}
 
@@ -80,6 +69,25 @@ public class WebSocketConfig implements WebSocketConfigurer{
 			protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 				// TODO Auto-generated method stub
 				super.handleTextMessage(session, message);
+				
+				try(FileInputStream fis=new FileInputStream("D:/animal.webm")) {
+					byte[] buffer=new byte[1024];
+					
+					int len;
+					
+					while((len=fis.read(buffer))!=-1) {
+
+						session.sendMessage(new BinaryMessage(buffer, false));
+					}
+					
+					session.sendMessage(new BinaryMessage(buffer));
+
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				
 				System.out.println("Message:"+message.getPayload()+" Uri:"+session.getUri());
 

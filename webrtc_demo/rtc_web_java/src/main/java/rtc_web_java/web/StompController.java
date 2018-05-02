@@ -38,18 +38,14 @@ public class StompController {
 	@SendToUser("/subscribe")
 	public byte[] receptMessage(@RequestParam(name="message") String message) throws IOException {
 
-		
-		
-
 		byte[] buffer=new byte[512];
 
 		try (FileInputStream fis=new FileInputStream(new File("D:/animal.webm"))){
 			
-			OutputStream os=((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getResponse().getOutputStream();
-			
-			
-			
-			
+			HttpServletResponse resp=((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getResponse();
+					
+			OutputStream os=resp.getOutputStream();
+
 			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -58,7 +54,6 @@ public class StompController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 
 		return null;
 	}
